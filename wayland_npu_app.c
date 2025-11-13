@@ -83,7 +83,7 @@
 #endif
 
 /* User Defines */
-#define FRAME_CAPTURE_RATE 30
+#define FRAME_CAPTURE_RATE 5
 /* User Defines End */
 
 /*
@@ -446,14 +446,16 @@ void nc_draw_gl_npu(struct viewport viewport, int network_task, pp_result_buf *n
                 stObjInfo obj_info = det_result->class_objs[i].objs[bidx];
 
                 /* User Edit */
-                if(car_movement_scalar[obj_info.track_id] >= 0.5) 
+                if(car_movement_scalar[obj_info.track_id] >= 4000) 
                     nc_opengl_draw_rectangle(obj_info.bbox.x, obj_info.bbox.y, obj_info.bbox.w, obj_info.bbox.h, warn, g_npu_prog);
                 else
                     nc_opengl_draw_rectangle(obj_info.bbox.x, obj_info.bbox.y, obj_info.bbox.w, obj_info.bbox.h, color[i], g_npu_prog);
-                Point curr = {obj_info.bbox.x + obj_info.bbox.w/2, obj_info.bbox.y + obj_info.bbox.h/2};
+                Point curr = {obj_info.bbox.x, obj_info.bbox.y};
                 if(frame_cnt == 0) {
                     memcpy(&past_pos[obj_info.track_id], &curr, sizeof(Point));
-                    car_movement_scalar[obj_info.track_id] = (obj_info.bbox.y - past_pos[obj_info.track_id].y)/(obj_info.bbox.x - past_pos[obj_info.track_id].x);
+                    float dy = (obj_info.bbox.y - past_pos[obj_info.track_id].y);
+                    float dx = (obj_info.bbox.x - past_pos[obj_info.track_id].x);
+                    car_movement_scalar[obj_info.track_id] = abs( dy*dy - dx*dx );
                 }
                 /* User Edit End */
                 
