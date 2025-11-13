@@ -452,10 +452,10 @@ void nc_draw_gl_npu(struct viewport viewport, int network_task, pp_result_buf *n
                     nc_opengl_draw_rectangle(obj_info.bbox.x, obj_info.bbox.y, obj_info.bbox.w, obj_info.bbox.h, color[i], g_npu_prog);
                 Point curr = {obj_info.bbox.x, obj_info.bbox.y};
                 if(frame_cnt == 0) {
-                    memcpy(&past_pos[obj_info.track_id], &curr, sizeof(Point));
                     float dy = (obj_info.bbox.y - past_pos[obj_info.track_id].y);
                     float dx = (obj_info.bbox.x - past_pos[obj_info.track_id].x);
                     car_movement_scalar[obj_info.track_id] = abs( dy*dy - dx*dx );
+                    memcpy(&past_pos[obj_info.track_id], &curr, sizeof(Point));
                 }
                 /* User Edit End */
                 
