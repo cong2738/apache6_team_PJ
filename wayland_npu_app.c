@@ -402,6 +402,8 @@ typedef struct  {
 }Point;
 
 
+float warn[4] = {0,0,0,1};
+
 void nc_draw_gl_npu(struct viewport viewport, int network_task, pp_result_buf *net_result, struct gl_npu_program g_npu_prog)
 {
     stCnnPostprocessingResults *det_result = &net_result->cnn_result;
@@ -442,9 +444,12 @@ void nc_draw_gl_npu(struct viewport viewport, int network_task, pp_result_buf *n
         for(int i=0; i<draw_cnn->max_class_cnt; i++){
             for(int bidx = 0; bidx < det_result->class_objs[i].obj_cnt; bidx++) {
                 stObjInfo obj_info = det_result->class_objs[i].objs[bidx];
-                nc_opengl_draw_rectangle(obj_info.bbox.x, obj_info.bbox.y, obj_info.bbox.w, obj_info.bbox.h, color[i], g_npu_prog);
-                
+
                 /* User Edit */
+                if(car_movement_scalar[obj_info.track_id] >= 0.5) 
+                    nc_opengl_draw_rectangle(obj_info.bbox.x, obj_info.bbox.y, obj_info.bbox.w, obj_info.bbox.h, warn, g_npu_prog);
+                else
+                    nc_opengl_draw_rectangle(obj_info.bbox.x, obj_info.bbox.y, obj_info.bbox.w, obj_info.bbox.h, color[i], g_npu_prog);
                 Point curr = {obj_info.bbox.x + obj_info.bbox.w/2, obj_info.bbox.y + obj_info.bbox.h/2};
                 if(frame_cnt == 0) {
                     memcpy(&past_pos[obj_info.track_id], &curr, sizeof(Point));

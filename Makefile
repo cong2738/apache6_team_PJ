@@ -11,10 +11,17 @@
 # adjust-set
 
 #############################################################
-# set cnn network - PELEESEG / PELEEDET / YOLOV5 / YOLOV8 / UFLD / TRICHIMERA /USER_EDIT
-CNN_NETWORK_SETTING = USER_EDIT
+# set cnn network - PELEESEG / PELEEDET / YOLOV5 / YOLOV8 / UFLD / TRICHIMERA 
+# User Edited setting - /CCTV /BLACKBOX
+CNN_NETWORK_SETTING = CCTV
 
-ifeq ($(CNN_NETWORK_SETTING), USER_EDIT)
+ifeq ($(CNN_NETWORK_SETTING), BLACKBOX)
+USE_CNN_YOLOV8_NETWORK = yes
+SHOW_YOLOV8_DETECT = yes
+USE_BYTETRACK = yes
+endif
+
+ifeq ($(CNN_NETWORK_SETTING), CCTV)
 USE_CNN_YOLOV8_NETWORK = yes
 SHOW_YOLOV8_DETECT = yes
 USE_BYTETRACK = yes
